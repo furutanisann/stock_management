@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>商品一覧</title>
+<!-- bootstrapを読み込む -->
+<link rel="stylesheet" type="text/css"
+	th:href="@{/css/bootstrap.min.css}">
+<script type="text/javascript" th:src="@{/js/bootstrap.bundle.min.js}"></script>
+<!-- jqueryを読み込む -->
+<script type="text/javascript" th:src="@{/js/jquery-3.6.0.min.js}"></script>
+<!-- bootstrap-datepickerを読み込む -->
+<link rel="stylesheet" type="text/css"
+	th:href="@{/css/bootstrap-datepicker.min.css}">
+<script type="text/javascript"
+	th:src="@{/js/bootstrap-datepicker.min.js}"></script>
+<script type="text/javascript"
+	th:src="@{/js/bootstrap-datepicker.ja.min.js}"></script>
+<!-- date-tableを読み込む -->
+<link rel="stylesheet" type="text/css"
+	th:href="@{/css/datatables.min.css}" />
+<script type="text/javascript" th:src="@{/js/datatables.min.js}"></script>
+</head>
+<body>
+	<nav class="navbar navbar-expand-lg navbar-light"
+		style="background-color: #CCFFFF;">
+		<span class="navbar-brand"> <strong>商品一覧</strong> <svg
+				xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+				fill="currentColor" class="bi bi-book" viewBox="0 0 16 16">
+          <path
+					d="M1 2.828c.885-.37 2.154-.769 3.388-.893 1.33-.134 2.458.063 3.112.752v9.746c-.935-.53-2.12-.603-3.213-.493-1.18.12-2.37.461-3.287.811V2.828zm7.5-.141c.654-.689 1.782-.886 3.112-.752 1.234.124 2.503.523 3.388.893v9.923c-.918-.35-2.107-.692-3.287-.81-1.094-.111-2.278-.039-3.213.492V2.687zM8 1.783C7.015.936 5.587.81 4.287.94c-1.514.153-3.042.672-3.994 1.105A.5.5 0 0 0 0 2.5v11a.5.5 0 0 0 .707.455c.882-.4 2.303-.881 3.68-1.02 1.409-.142 2.59.087 3.223.877a.5.5 0 0 0 .78 0c.633-.79 1.814-1.019 3.222-.877 1.378.139 2.8.62 3.681 1.02A.5.5 0 0 0 16 13.5v-11a.5.5 0 0 0-.293-.455c-.952-.433-2.48-.952-3.994-1.105C10.413.809 8.985.936 8 1.783z" />
+        </svg>
+		</span>
+		<!-- 登録画面への移動 -->
+		<form method="GET" th:action="@{/stocklist/form}">
+			<div class="footer-button row justify-content-end">
+				<div class="col-1 m-1">
+					<button type="submit" class="btn btn-primary">商品登録</button>
+					<input type="hidden" name="isUpdate" value=false>
+				</div>
+			</div>
+		</form>
+		<div class="collapse navbar-collapse justify-content-end">
+			<ul class="navbar-nav">
+				<li class="nav-item "><span class="navbar-text"
+					th:text="'ログインユーザ：' + ${#httpServletRequest.remoteUser}">></span></li>
+			</ul>
+			<form method="POST" th:action="@{/logout}">
+				<button type="submit" class="btn btn-link">ログアウト</button>
+			</form>
+		</div>
+	</nav>
+	<!--  検索用 -->
+	<div class="container-fluid">
+		<div class="search m-2">
+			<form method="GET" th:action="@{/stocklist}" th:object="${getForm}">
+				<div class="row">
+					<div class="form-group col-3 m-2">
+						<label for="category">分類</label> <select id="category"
+							name="category" class="form-select col-2"
+							th:value="${getForm.category}">
+							<option></option>
+							<option value="1" th:selected="${getForm.factory} == 1">丹波工場</option>
+							<option value="2" th:selected="${getForm.factory} == 2">本社工場</option>
+						</select>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-1 m-1">
+						<button type="submit" class="btn btn-primary">検索</button>
+					</div>
+				</div>
+			</form>
+		</div>
+		<!--  検索用ここまで -->
+		<!--  一覧表示 -->
+		<div class="list">
+			<table id="table" class="table table-striped table-hover">
+				<thead class="thead-lignt">
+					<tr>
+						<th class="col-2">商品番号</th>
+						<th class="col-6">商品名</th>
+						<th class="col-2">賞味期限</th>
+						<th class="col-1">生産工場</th>
+					</tr>
+				</thead>
+				<tbody>
+					<!-- listをitemに1件ずつの値をループで取得します -->
+					<tr th:each="item: ${list}">
+						<td th:text=${item.id}></td>
+						<td th:text=${item.name}></td>
+						<td th:text=${item.expiration_date}></td>
+						<td th:text=${item.factory_id}></td>
+						<td><a class="btn btn-primary"
+							th:href="@{/stocklist/{id}(id=${item.id})}">詳細</a></td>
+					</tr>
+					<!--              ここまで繰り返し               -->
+				</tbody>
+			</table>
+		</div>
+		<!-- 一覧ここまで -->
+	</div>
+</body>
+
+
+<!-- テーブルの賞味期限表示変更時使用予定 -->
+<script>
+    $('#date_sample').datepicker({
+      format: 'yyyy/mm',
+      language: 'ja',
+      autoclose: true,
+      minViewMode: 'months'
+    });
+    $.extend( $.fn.dataTable.defaults, {
+         language: {
+             url: "http://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Japanese.json"
+         }
+     });
+     $("#table").DataTable({
+       // 検索機能 無効
+       searching: false,
+       scrollY: 250
+     });
+  </script>
+</html>
