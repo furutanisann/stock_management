@@ -37,7 +37,7 @@ public class ItemService {
 	}
 	
 	//１件データ取得用（編集ページ確認）
-	public Item findById(int id) {
+	public List<Item> findById(int id) {
     	try {
     		return dao.findByid(id);
     		//１件取得できなかったときの処理

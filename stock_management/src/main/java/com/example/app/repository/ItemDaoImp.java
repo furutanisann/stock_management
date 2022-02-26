@@ -1,5 +1,6 @@
 package com.example.app.repository;
 
+import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,6 +34,7 @@ public class ItemDaoImp implements ItemDao {
 
 	//要求内容（すべての投稿内容を取得)
 	public List<Item> findList(GetForm form) {
+		//StringBuilderでSQLを連結
 		StringBuilder sqlBuilder = new StringBuilder();
         sqlBuilder.append("SELECT * from item");
 
@@ -41,9 +43,9 @@ public class ItemDaoImp implements ItemDao {
         Map<String, String> param = new HashMap<>();
 
         // パラメータが存在した場合、where句にセット
-        if(form.getFactory() != null && form.getFactory() != "") {
-            sqlBuilder.append(" WHERE factory_id = :factory");
-            param.put("factory", form.getFactory());
+        if(form.getName() != null && form.getName() != "") {
+        	param.put("name", (form.getName()));
+            sqlBuilder.append(" WHERE name = :name");
         }
 
         String sql = sqlBuilder.toString();
@@ -67,6 +69,40 @@ public class ItemDaoImp implements ItemDao {
         return list;
 	}
 
+	//詳細ページ移動時のデータ取得(１商品をまとめて取得）
+	@Override
+	//引数のID番号から取得
+	//データベースに１件もなかった場合、例外処理を行う
+	public List<Item> findByid(int id) throws  IncorrectResultSizeDataAccessException {
+		//DATE_FORMATの返り値はString
+		String sql = " select d.item_id,d.name, DATE_FORMAT(c.expiration,'%Y年%m月%d日') as date, c.stock,c.date "
+				+ "from item as d inner join stock as c on d.item_id = c.item_id "
+				+ "WHERE d.item_id = :id ;";
+		
+		// パラメータにいれてMapへ返す
+		Map<String, Object> param = new HashMap<>();
+		param.put("id", id);
+        //タスク一覧をMapのListで取得
+        List<Map<String, Object>> resultList = jdbcTemplate.queryForList(sql, param);
+        //return用の空のListを用意
+        List<Item> list = new ArrayList<Item>();
+
+        //データをItemにまとめる(DaoからEntityクラスへ引き継ぎ）
+        for(Map<String, Object> result : resultList) {
+            Item item = new Item();
+            item.setId((int)result.get("item_id"));
+            item.setName((String)result.get("name"));
+            item.setDate((String)result.get("date"));
+            item.setStock((int)result.get("stock"));
+            item.setDate2((Date)result.get("date"));
+            list.add(item);
+        }
+        
+        //全件取得と取得方法が違うが中身を一部変更している
+        return list;
+	}
+	
+	
 	//登録用
 	@Override
 	public int insert(PostForm form) {
@@ -89,24 +125,6 @@ public class ItemDaoImp implements ItemDao {
 
 	}
 
-	//詳細ページ移動時のデータ取得
-	@Override
-	//データベースに１件もなかった場合、例外処理を行う
-	public Item findByid(int id) throws  IncorrectResultSizeDataAccessException {
-		String sql = "SELECT d.id, d.category, d.title, d.content, DATE_FORMAT(d.date, '%Y/%m/%d') AS date, d.update_datetime, c.name "
-	            + "FROM diary AS d INNER JOIN category_code AS c ON d.category = c.cd "
-	            + "WHERE d.id = :id";
-
-	    // パラメータにいれてMapへ返す
-	    Map<String, Object> param = new HashMap<>();
-	    param.put("id", id);
-	    // queryForMap（１つ取得するために）
-	    Map<String, Object> result = jdbcTemplate.queryForMap(sql, param);
-	    Item item = new Item();
-
-
-	    return item;
-	}
 
 	//更新用
 	@Override

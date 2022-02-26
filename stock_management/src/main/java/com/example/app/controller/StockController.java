@@ -61,23 +61,39 @@ public class StockController {
      */
     // '/1'などのURLをパラメータ名として取得
     @GetMapping("/{id}")
-    public String showUpdate(
+    public String detail(
         @PathVariable int id,
         Model model) {
 
-        //Itemを取得(NULL（空）かどうかNULLチェック）
-        Optional<Item> itemOpl = Optional.ofNullable(itemservice.findById(id));
+        //商品取得(NULL（空）かどうかNULLチェック）
+        Optional<List<Item>> itemOpl = Optional.ofNullable(itemservice.findById(id));
 
         //NULLであればメッセージのみ、データが有れば詳細画面
         if(itemOpl.isPresent()) {
             model.addAttribute("items", itemOpl.get());
-            return "detail";
+            return "item";
         } else {
             model.addAttribute("error", "対象データが存在しません");
-            return "detail";
+            return "item";
         }
     }
+    
+    
+    /**
+     * 一件タスクデータを取得し、詳細ページ表示
+     * @param id
+     * @param model
+     * @return resources/templates/detail.html
+     */
+    // '/1'などのURLをパラメータ名として取得
+    @GetMapping("/{id}/adjustment")
+    public String adjustment(
+        @PathVariable int id,
+        Model model) {
 
+    	return "adjustment";
+
+    }
 
     /**
      * 「一覧へ」選択時、一覧画面へ（戻る）

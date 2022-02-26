@@ -15,8 +15,8 @@ public interface ItemDao {
 	//登録用
 	int insert(PostForm form) ;
 	
-	//idを指定して１つ編集する
-	Item findByid(int id);
+	//idを指定して１つ商品の在庫内容を表示
+	List<Item> findByid(int id);
 	
 	//更新用
 	int update(PutForm form);
