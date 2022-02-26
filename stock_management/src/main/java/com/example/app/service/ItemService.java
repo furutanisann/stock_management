@@ -1,5 +1,6 @@
 package com.example.app.service;
 
+import java.sql.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +37,7 @@ public class ItemService {
 		return dao.insert(form);
 	}
 	
-	//１件データ取得用（編集ページ確認）
+	//１つの商品（編集ページ確認）
 	public List<Item> findById(int id) {
     	try {
     		return dao.findByid(id);
@@ -44,6 +45,11 @@ public class ItemService {
     	} catch(IncorrectResultSizeDataAccessException e) {
     		return null;
     	}
+	}
+	
+	//１つの商品1件分（在庫調整するため）
+	public Item findByOnItem(int id, String date) {
+		return dao.findbyoneitem(id, date);
 	}
 	
 	//データ更新用

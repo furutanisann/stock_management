@@ -22,7 +22,50 @@
 <script type="text/javascript" th:src="@{/js/datatables.min.js}"></script>
 </head>
 <body>
-
+	<nav class="navbar navbar-expand-lg navbar-light"
+			style="background-color: #CCFFFF;">
+			<span class="navbar-brand"> <strong>商品一覧</strong> <svg
+					xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+					fill="currentColor" class="bi bi-book" viewBox="0 0 16 16">        </svg>
+			</span>
+			<div class="collapse navbar-collapse justify-content-end">
+				<ul class="navbar-nav">
+					<li class="nav-item "><span class="navbar-text"
+						th:text="'ログインユーザ：' + ${#httpServletRequest.remoteUser}">></span></li>
+				</ul>
+				<form method="POST" th:action="@{/logout}">
+					<button type="submit" class="btn btn-link">ログアウト</button>
+				</form>
+			</div>
+		</nav>
+		<div class="list mt-5">
+			<table id="table" class="table table-striped table-hover">
+				<thead class="thead-lignt">
+					<tr>
+						<th class="col-2">商品番号</th>
+						<th class="col-6">商品名</th>
+						<th class="col-2">賞味期限</th>
+						<th class="col-1">在庫数</th>
+					</tr>
+				</thead>
+				<tbody>
+					<!-- listをitemに1件ずつの値をループで取得します -->
+					<tr >
+						<td th:text=${item.id}></td>
+						<td th:text=${item.name}></td>
+						<td th:text=${item.date}></td>
+						<td th:text=${item.stock}></td>
+					</tr>
+					<!--              ここまで繰り返し               -->
+				</tbody>
+			</table>
+		</div>
+		<!-- 戻るボタン -->
+		<form th:action="@{/stocklist}" method="get">
+			<div class="d-grid gap-2 col-6 mx-auto">
+			   	<button class="btn btn-primary "  type="submit">戻る</button>
+			</div>
+		</form>
 
 </body>
 </html>

@@ -1,5 +1,6 @@
 package com.example.app.controller;
 
+import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -80,17 +81,20 @@ public class StockController {
     
     
     /**
-     * 一件タスクデータを取得し、詳細ページ表示
+     * 詳細ページ変更画面表示
      * @param id
      * @param model
-     * @return resources/templates/detail.html
+     * @return resources/templates/adjustent.html
      */
     // '/1'などのURLをパラメータ名として取得
     @GetMapping("/{id}/adjustment")
     public String adjustment(
+    	@RequestParam String date,
         @PathVariable int id,
         Model model) {
-
+    	
+    	Item item = itemservice.findByOnItem(id,date);
+    	model.addAttribute("item",item);
     	return "adjustment";
 
     }
@@ -112,8 +116,7 @@ public class StockController {
 
 
     /**
-     * 新規登録・編集ページへ
-     * 同じ内容を使って分岐させて使用
+     * 新規登録へ
      * @param model
      * @return resources/templates/form.html
      */

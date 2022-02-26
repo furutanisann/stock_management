@@ -75,9 +75,9 @@ public class ItemDaoImp implements ItemDao {
 	//データベースに１件もなかった場合、例外処理を行う
 	public List<Item> findByid(int id) throws  IncorrectResultSizeDataAccessException {
 		//DATE_FORMATの返り値はString
-		String sql = " select d.item_id,d.name, DATE_FORMAT(c.expiration,'%Y年%m月%d日') as date, c.stock,c.date "
-				+ "from item as d inner join stock as c on d.item_id = c.item_id "
-				+ "WHERE d.item_id = :id ;";
+		String sql = " select d.item_id,d.name, DATE_FORMAT(c.expiration,'%Y年%m月%d日') as date, c.stock,c.expiration "
+					+ "from item as d inner join stock as c on d.item_id = c.item_id "
+					+ "WHERE d.item_id = :id ;";
 		
 		// パラメータにいれてMapへ返す
 		Map<String, Object> param = new HashMap<>();
@@ -94,7 +94,7 @@ public class ItemDaoImp implements ItemDao {
             item.setName((String)result.get("name"));
             item.setDate((String)result.get("date"));
             item.setStock((int)result.get("stock"));
-            item.setDate2((Date)result.get("date"));
+            item.setDate2((Date)result.get("expiration"));
             list.add(item);
         }
         
@@ -102,6 +102,27 @@ public class ItemDaoImp implements ItemDao {
         return list;
 	}
 	
+	//１つの商品の１つの賞味期限取得
+	@Override
+	public Item findbyoneitem(int id, String date) {
+		String sql = " select d.item_id,d.name, DATE_FORMAT(c.expiration,'%Y年%m月%d日') as date, c.stock, "
+				+ "from item as d inner join stock as c on d.item_id = c.item_id "
+				+ "WHERE d.item_id = :id AND c.expiration = :date;";
+		
+		// パラメータにいれてMapへ返す
+		Map<String, Object> param = new HashMap<>();
+		param.put("id", id);
+		param.put("date", date);
+		
+		Item item = new Item();
+		
+		Map<String,Object> result = jdbcTemplate.queryForMap(sql, param);
+			item.setId((int)result.get("item_id"));
+            item.setName((String)result.get("name"));
+            item.setDate((String)result.get("date"));
+            item.setStock((int)result.get("stock"));
+        return item;
+	};
 	
 	//登録用
 	@Override
@@ -159,6 +180,7 @@ public class ItemDaoImp implements ItemDao {
 		    param.put("id", id);
 		    count = jdbcTemplate.update(sql, param);
 		    return count;
-	};
+	}
+
 
 }

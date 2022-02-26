@@ -1,5 +1,6 @@
 package com.example.app.repository;
 
+
 import java.util.List;
 
 import com.example.app.entity.Item;
@@ -9,6 +10,9 @@ import com.example.app.form.PutForm;
 
 //データベース接続用インターフェースクラス
 public interface ItemDao {
+	
+
+
 	//登録されているものを取得メソッド
 	List<Item> findList(GetForm form);
 	
@@ -23,4 +27,7 @@ public interface ItemDao {
 	
 	//削除用
 	int delete(int id);
+	
+	//商品1つを更新するために取得
+	Item findbyoneitem(int id, String date);
 }
