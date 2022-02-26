@@ -38,7 +38,7 @@ public class UserAccountDaoImp implements UserAccountDao {
         try {
             Map<String, Object> result = jdbcTemplate.queryForMap(sql, param);
 
-            user.setStaff_id((String) result.get("staff_id"));
+            user.setStaff_id((int) result.get("staff_id"));
             user.setPassword((String)result.get("password"));
             user.setName((String)result.get("name"));
         }catch(EmptyResultDataAccessException e){
