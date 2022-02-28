@@ -107,20 +107,14 @@ public class StockController {
      * @return resources/templates/adjustent.html
      */
     // '/1'などのURLをパラメータ名として取得
-    @PostMapping(path="/{id}/adjustment", params="update")
+    @PostMapping("/{id}/adjustment")
     public String updateAdjustment(
             @ModelAttribute ChangeStock form,
-            @PathVariable int id,
-            BindingResult result,
-            Model model
+            @PathVariable int id
         ) {
-    	//バリデーションで問題があった場合エラーで戻る
-            if(result.hasErrors()) {
-                model.addAttribute("error", "パラメータエラーが発生しました。");
-                return "redirect:/stocklist/" + id + "/adjustment";
-            }
+
             int count = itemservice.updateonitem(form);
-            return "redirect:/stocklist";
+            return "redirect:/stocklist/" + id;
         }
 
     /**

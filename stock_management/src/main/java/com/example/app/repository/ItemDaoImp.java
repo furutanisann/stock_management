@@ -136,7 +136,7 @@ public class ItemDaoImp implements ItemDao {
 		//URLからのパラメーター作成用
 		Map<String, Object> param = new HashMap<>();
 		//formで送られてきたデータを一つ一つ取り出す
-		param.put("stockchange", form.getChangestock());
+		param.put("changestock", form.getChangestock());
 		param.put("id", form.getId());
 		param.put("date", form.getDate());
 		

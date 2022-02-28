@@ -43,9 +43,7 @@
 		<h2 th:if="${error}" style="color: red;">[[${error}]]</h2>
 		<div class="create m-2">
 			<!-- boot strap で一部バリデーション実施 -->
-			<!-- 送信前にチェックしています(check()） true時のみ実行 -->
-			<form id="form" class="needs-validation" novalidate method="POST"
-				th:action="@{/stocklist/{id}/adjustment(id=${item.id})}"
+			<form id="form" method="POST"　th:action="@{/stocklist/{id}/adjustment(id=${item.id})}"
 				th:object="${changeStock}" >
 				<p class="p-1 h4" th:text="在庫調整"></p>
 				<!-- データ作成内容 -->
@@ -66,16 +64,18 @@
 						<label for="categoryForm">賞味期限</label>
 						 <input type="text" class="form-control" 
 						  th:value="${item.date}" readonly>
-						  <!--  送信の際はDate型で受け渡し -->
-						<input type="hidden" name="date" value="${item.date2}" >
 					</div>
 				</div>
 				<div class="row justify-content-center">
 					<div class="form-group col-8">
-						<label for="categoryForm">使用数</label> 
-						 <input type="text" class="form-control" name="nameForm" 
-						 id="name"   th:value="${item.stock}">
-						
+						<label for="categoryForm">在庫変更数</label> 
+						<!-- テキスト入力が使わせたい場合 -->
+<!-- 						 <input type="text" class="form-control" name="stock" 
+						 id="stock"   th:value="${item.stock}"> -->
+						 <!-- セレクトで入力制限をかけておく -->
+						 	<input type="hidden" id="input_num" th:value="${item.stock}">
+						 	<select name="changestock" id="stocks" class="form-select form-select-lg mb-3 selectpicker" size="2" aria-label="size 3 select example">
+						 	</select>
 					</div>
 				</div>
 				<div class="row justify-content-center pt-3">
@@ -92,6 +92,22 @@
 			   	<button class="btn btn-primary "  type="submit">戻る</button>
 			</div>
 		</form>
-
+	<script>
+		//繰り返しでoptionの値をストックの数作成する
+		//読み込み後
+		window.onload = function input_option(){
+			var num = document.getElementById("input_num").value;
+			const selectset = document.getElementById('stocks');
+			console.log(num)
+			for(var i = 1; i <= num; i++ ){
+				const option1 = document.createElement('option');
+				option1.value = i;
+				option1.textContent = i;
+				selectset.appendChild(option1);
+			}	
+		}
+		
+	</script>
+	
 </body>
 </html>
