@@ -13,6 +13,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.example.app.entity.Item;
+import com.example.app.form.ChangeStock;
 import com.example.app.form.GetForm;
 import com.example.app.form.PostForm;
 import com.example.app.form.PutForm;
@@ -105,9 +106,9 @@ public class ItemDaoImp implements ItemDao {
 	//１つの商品の１つの賞味期限取得
 	@Override
 	public Item findbyoneitem(int id, String date) {
-		String sql = " select d.item_id,d.name, DATE_FORMAT(c.expiration,'%Y年%m月%d日') as date, c.stock, "
+		String sql = "SELECT d.item_id,d.name, DATE_FORMAT(c.expiration,'%Y年%m月%d日') as date, c.stock "
 				+ "from item as d inner join stock as c on d.item_id = c.item_id "
-				+ "WHERE d.item_id = :id AND c.expiration = :date;";
+				+ "WHERE d.item_id = :id AND c.expiration = :date ;";
 		
 		// パラメータにいれてMapへ返す
 		Map<String, Object> param = new HashMap<>();
@@ -123,6 +124,27 @@ public class ItemDaoImp implements ItemDao {
             item.setStock((int)result.get("stock"));
         return item;
 	};
+	
+	
+	
+	//１つの商品を在庫調整
+	@Override
+	public int updateoneitem(ChangeStock form) {
+		int count = 0;
+		String sql = "UPDATE stock SET stock = (stock - :changestock) "
+				   + "WHERE item_id = :id AND expiration = :date";
+		//URLからのパラメーター作成用
+		Map<String, Object> param = new HashMap<>();
+		//formで送られてきたデータを一つ一つ取り出す
+		param.put("stockchange", form.getChangestock());
+		param.put("id", form.getId());
+		param.put("date", form.getDate());
+		
+		//数の更新のためにデータベースへ
+	    count = jdbcTemplate.update(sql, param);
+	    return count;
+	}
+	
 	
 	//登録用
 	@Override

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.app.entity.Item;
+import com.example.app.form.ChangeStock;
 import com.example.app.form.GetForm;
 import com.example.app.form.PostForm;
 import com.example.app.form.PutForm;
@@ -47,9 +48,14 @@ public class ItemService {
     	}
 	}
 	
-	//１つの商品1件分（在庫調整するため）
+	//１つの商品1件分（在庫）
 	public Item findByOnItem(int id, String date) {
 		return dao.findbyoneitem(id, date);
+	}
+	
+	//1つの商品1件分（在庫調整）
+	public int updateonitem(ChangeStock form){
+		return dao.updateoneitem(form);
 	}
 	
 	//データ更新用

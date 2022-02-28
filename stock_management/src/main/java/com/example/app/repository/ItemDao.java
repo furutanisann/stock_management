@@ -4,6 +4,7 @@ package com.example.app.repository;
 import java.util.List;
 
 import com.example.app.entity.Item;
+import com.example.app.form.ChangeStock;
 import com.example.app.form.GetForm;
 import com.example.app.form.PostForm;
 import com.example.app.form.PutForm;
@@ -30,4 +31,7 @@ public interface ItemDao {
 	
 	//商品1つを更新するために取得
 	Item findbyoneitem(int id, String date);
+	
+	//商品１つの在庫（出荷表へ登録も含む）
+	int updateoneitem(ChangeStock form);
 }

@@ -1,6 +1,5 @@
 package com.example.app.controller;
 
-import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.app.entity.Item;
+import com.example.app.form.ChangeStock;
 import com.example.app.form.GetForm;
 import com.example.app.form.PostForm;
 import com.example.app.form.PutForm;
@@ -98,6 +98,30 @@ public class StockController {
     	return "adjustment";
 
     }
+    
+    
+    /**
+     * 詳細ページから数変更
+     * @param id
+     * @param model
+     * @return resources/templates/adjustent.html
+     */
+    // '/1'などのURLをパラメータ名として取得
+    @PostMapping(path="/{id}/adjustment", params="update")
+    public String updateAdjustment(
+            @ModelAttribute ChangeStock form,
+            @PathVariable int id,
+            BindingResult result,
+            Model model
+        ) {
+    	//バリデーションで問題があった場合エラーで戻る
+            if(result.hasErrors()) {
+                model.addAttribute("error", "パラメータエラーが発生しました。");
+                return "redirect:/stocklist/" + id + "/adjustment";
+            }
+            int count = itemservice.updateonitem(form);
+            return "redirect:/stocklist";
+        }
 
     /**
      * 「一覧へ」選択時、一覧画面へ（戻る）
