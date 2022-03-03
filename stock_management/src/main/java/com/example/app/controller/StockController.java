@@ -138,19 +138,12 @@ public class StockController {
      * @param model
      * @return resources/templates/form.html
      */
-    @PostMapping("/form")
+    @GetMapping("/form")
     public String formPage(
     	@ModelAttribute PutForm form,
         Model model
     ) {
-    	model.addAttribute("putForm", form);
-    	//新規登録か編集なのかで分岐
-    	//true or false は　HTMLで設定
-    	if (form.getUpdateFlag()) {
-            model.addAttribute("update", true);
-        } else {
-            model.addAttribute("update", false);
-        }
+
         return "form";
     }
 
@@ -173,12 +166,12 @@ public class StockController {
         Model model
     ) {
         if(result.hasErrors()) {
-            model.addAttribute("error", "パラメータエラーが発生しました。");
+            model.addAttribute("error", "登録情報の一部に誤りがあります");
             return "form";
         }
         int count = itemservice.insert(form);
         model.addAttribute("postForm", form);
-        return "redirect:/stocklist";
+        return "redirect:/startpage";
     }
 
 

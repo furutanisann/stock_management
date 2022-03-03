@@ -17,16 +17,17 @@ public interface ItemDao {
 	//登録されているものを取得メソッド
 	List<Item> findList(GetForm form);
 	
-	//登録用
-	int insert(PostForm form) ;
 	
 	//idを指定して１つ商品の在庫内容を表示
 	List<Item> findByid(int id);
 	
-	//更新用
+	//商品登録用
+	int insert(PostForm form) ;
+	
+	//商品更新用
 	int update(PutForm form);
 	
-	//削除用
+	//商品削除用
 	int delete(int id);
 	
 	//商品1つを更新するために取得

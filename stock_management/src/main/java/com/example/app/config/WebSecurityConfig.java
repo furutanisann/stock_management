@@ -41,7 +41,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .usernameParameter("staff_id")
             .passwordParameter("password")
             //ログイン成功時移動
-            .defaultSuccessUrl("/stocklist", true)
+            .defaultSuccessUrl("/startpage", true)
             .failureUrl("/loginForm?error=true")
             //ログアウト部分（全ユーザーに適応）
             .and()

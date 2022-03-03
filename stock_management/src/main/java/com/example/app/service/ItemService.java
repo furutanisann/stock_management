@@ -33,7 +33,7 @@ public class ItemService {
 	       return dao.findList(form);
 	}
 	
-	//値の登録
+	//データの登録
 	public int insert(PostForm form) {
 		return dao.insert(form);
 	}

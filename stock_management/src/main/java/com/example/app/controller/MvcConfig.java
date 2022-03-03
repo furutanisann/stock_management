@@ -14,5 +14,6 @@ public class MvcConfig implements WebMvcConfigurer {
 		//　ドメイン後の指定の名前から、---.htmlをよびだす
 		registry.addViewController("/").setViewName("loginForm");
 		registry.addViewController("/loginForm").setViewName("loginForm");
+		registry.addViewController("/startpage").setViewName("startpage");
 	}
 }

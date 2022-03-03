@@ -20,12 +20,7 @@
 <body>
 	<nav class="navbar navbar-expand-lg navbar-light"
 		style="background-color: #CCFFFF;">
-		<span class="navbar-brand"> <strong>商品登録</strong> <svg
-				xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-				fill="currentColor" class="bi bi-book" viewBox="0 0 16 16">
-          <path
-					d="M1 2.828c.885-.37 2.154-.769 3.388-.893 1.33-.134 2.458.063 3.112.752v9.746c-.935-.53-2.12-.603-3.213-.493-1.18.12-2.37.461-3.287.811V2.828zm7.5-.141c.654-.689 1.782-.886 3.112-.752 1.234.124 2.503.523 3.388.893v9.923c-.918-.35-2.107-.692-3.287-.81-1.094-.111-2.278-.039-3.213.492V2.687zM8 1.783C7.015.936 5.587.81 4.287.94c-1.514.153-3.042.672-3.994 1.105A.5.5 0 0 0 0 2.5v11a.5.5 0 0 0 .707.455c.882-.4 2.303-.881 3.68-1.02 1.409-.142 2.59.087 3.223.877a.5.5 0 0 0 .78 0c.633-.79 1.814-1.019 3.222-.877 1.378.139 2.8.62 3.681 1.02A.5.5 0 0 0 16 13.5v-11a.5.5 0 0 0-.293-.455c-.952-.433-2.48-.952-3.994-1.105C10.413.809 8.985.936 8 1.783z" />
-        </svg>
+		<span class="navbar-brand"> <strong>商品登録</strong>
 		</span>
 		<div class="collapse navbar-collapse justify-content-end">
 			<ul class="navbar-nav">
@@ -46,79 +41,85 @@
 			<!--  ${update}? @{/stocklist/update}: @{/stocklist/insert で各表示変更する -->
 			<form id="form" class="needs-validation" novalidate method="POST"
 				th:action="${update}? @{/stocklist/update}: @{/stocklist/insert}"
-				th:object="${putForm}" onsubmit="return check()">
+				th:object="${putForm}" onSubmit="return check()">
 				<p class="p-1 h4" th:text="${update}? 編集: 新規作成"></p>
 				<!-- データ作成内容 -->
 				<div class="row justify-content-center">
 					<div class="form-group col-8">
 						<label for="title">商品名</label> <input type="text"
-							class="form-control" name="nameForm" id="name" th:value="*{name}"
+							class="form-control"  id="name" name="name"
 							placeholder="商品名">
 						<div class="invalid-feedback">25文字以内で入力してください</div>
 					</div>
 				</div>
 				<div class="row justify-content-center">
 					<div class="form-group col-8">
-						<label for="categoryForm">賞味期限</label> <select id="categoryForm"
-							class="form-select col-8" name="expiration_dateForm"
-							　th:value="*{expirationForm}" required>
-							<option selected></option>
-							<option value="6" th:selected="*{expiration_dateForm} == 6">６か月</option>
-							<option value="9" th:selected="*{expiration_dateForm} == 9">９か月</option>
-							<option value="6" th:selected="*{expiration_dateForm} == 12">１２か月</option>
+						<label for="categoryForm">賞味期限</label> 
+						<select id="expiration_date" name="expiration_date"
+							class="form-select col-8"  required>
+							<option selected value="">賞味期限を選択してください</option>
+							<option value="6" >６か月</option>
+							<option value="9" >９か月</option>
+							<option value="6" >１２か月</option>
 						</select>
-						<div class="invalid-feedback">必須入力です</div>
 					</div>
 				</div>
 				<div class="row justify-content-center">
 					<div class="form-group col-8">
-						<label for="categoryForm">生産工場</label> <select id="categoryForm"
-							class="form-select col-8" name="categoryForm"
-							　th:value="*{categoryForm}" required>
-							<option selected></option>
-							<option value="1" th:selected="*{factoryForm} == 1">丹波工場</option>
-							<option value="2" th:selected="*{factoryForm} == 2">本社工場</option>
+						<label for="categoryForm">生産工場</label> 
+						<select id="factory_id" 
+							class="form-select col-8" name="factory_id" required>
+							<option selected value="">生産工場を選択してください</option>
+							<option value="1" >丹波工場</option>
+							<option value="2" >本社工場</option>
 						</select>
 						<div class="invalid-feedback">必須入力です</div>
 					</div>
 				</div>
-				<input type="hidden" name="id" th:value="*{id}">
 				<div class="row justify-content-end">
-					<div class="col-1">
-						<button type="submit" class="btn btn-primary"
-							th:name="${update}? update: insert" th:text="${update}? 更新: 登録"
-							onClick="btn='insert'"></button>
-					</div>
-					<div class="col-1">
-						<button type="submit" class="btn btn-light" name="back"
-							onClick="btn='back'">一覧へ</button>
+					<div class="d-grid gap-5 col-6 mx-auto pt-5">
+						<button type="submit" class="btn btn-warning btn-lg"
+							th:name="insert" th:text="登録"></button>
 					</div>
 				</div>
 			</form>
 		</div>
 	</div>
+	<!-- 戻るボタン -->
+	<form th:action="@{/stocklist}" method="get">
+		<div class="d-grid gap-2 col-6 mx-auto pt-5">
+			  <button class="btn btn-primary "  type="submit">戻る</button>
+		</div>
+	</form>
 </body>
 
 <script>
-    $('#date_sample').datepicker({
-      format: 'yyyy/mm/dd',
-      language: 'ja',
-      autoclose: true,
-    });
 
-    const check = (event) => {
-      //　一覧ボタン押下した場合はチェックしない
-      if (btn === 'back'){
-        return true;
-      }
+	//送信前に入力内容確認
+	function check(){
+		var name = document.getElementById("name").value;
+		var date = document.getElementById("expiration_date").value;
+		var factory_id = document.getElementById("factory_id").value;
+		
+		switch(factory_id){
+			case '1' :
+				var factory = '丹波工場'; break;
+			case '2' :
+				var factory = '本社工場'; break;
+		}
+		
+		
+		if(window.confirm( '商品名　 :  ' + name + '\n' +  
+			   			   '賞味期限 :  ' + date + 'ヶ月\n' + 
+			   			   '製造工場 :  ' + factory + '\n' + 
+			   			   'で登録しますか？')){
+			return true;
+		}else{
+			windows.alter('キャンセルしました');
+			return false;
+		}
+				
+	}
 
-      const form = document.getElementById('form');
-      if (!form.checkValidity()){
-        form.classList.add('was-validated');
-        return false;
-      } else {
-        return true;
-      }
-    };
-  </script>
+</script>
 </html>

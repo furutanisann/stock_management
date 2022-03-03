@@ -44,7 +44,7 @@
 			<form method="GET" th:action="@{/stocklist}" th:object="${getForm}">
 				<div class="row">
 					<div class="form-group col-3 m-2">
-						<label for="category">分類</label> <select id="category"
+						<label for="category">名前検索</label> <select id="category"
 							name="name" class="form-select col-2">
 							<option></option>
 							<option  th:each="item: ${list}" th:value="${item.name}" th:inline="text">[[${item.name}]]</option>
@@ -84,18 +84,6 @@
 		</div>
 		<!-- 一覧ここまで -->
 	</div>
-	<!-- 登録画面への移動 -->
-	<div>
-		<form method="GET" th:action="@{/stocklist/form}">
-			<div class="footer-button row justify-content-end">
-				<div class="col-1 m-1">
-					<button type="submit" class="btn btn-primary">商品登録</button>
-					<input type="hidden" name="isUpdate" value=false>
-				</div>
-			</div>
-		</form>
-	</div>
-	<!-- 商品登録ここまで -->
 </body>
 
 

@@ -39,6 +39,7 @@ CREATE TABLE item(
 	name  VARCHAR(50) NOT NULL,
 	expiration_date INT(2) NOT NULL,
 	factory_id INT(3),
+	create_at date;
 	PRIMARY KEY(item_id)
 );
 

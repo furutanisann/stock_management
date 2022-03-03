@@ -151,14 +151,13 @@ public class ItemDaoImp implements ItemDao {
 	public int insert(PostForm form) {
 		//登録件数
 		int count = 0;
-		String sql = "INSERT INTO diary(category,title,content,date,update_datetime)"
-				    +"VALUES(:category,:title,:content,:date,update_datetime)";
+		String sql = "INSERT INTO item(name,expiration_date,factory_id,create_at) "
+				    +"VALUES(:name,:expiration_date,:factory_id,:update_time)";
 		//登録用データ
 		Map<String, Object> param = new HashMap<>();
-		param.put("category",form.getCategoryForm());
-		param.put("title", form.getTitleForm());
-		param.put("content", form.getContentForm());
-		param.put("date",form.getDateForm());
+		param.put("name",form.getName());
+		param.put("expiration_date", form.getExpiration_date());
+		param.put("factory_id", form.getFactory_id());
 		//アップデート時刻取得
 		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 		param.put("update_time", timestamp);

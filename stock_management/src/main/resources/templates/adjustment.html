@@ -39,12 +39,10 @@
 			</div>
 		</nav>
 	<div class="container-fluid">
-		<!-- エラーがあれば表示する model.addAttribute(“error”・・・指定すること-->
-		<h2 th:if="${error}" style="color: red;">[[${error}]]</h2>
 		<div class="create m-2">
-			<!-- boot strap で一部バリデーション実施 -->
+			<!-- 送信前にチェックしています(check()） true時のみ実行 個数確認 -->
 			<form id="form" method="POST"　th:action="@{/stocklist/{id}/adjustment(id=${item.id})}"
-				th:object="${changeStock}" >
+				th:object="${changeStock}"  onSubmit="return check()">
 				<p class="p-1 h4" th:text="在庫調整"></p>
 				<!-- データ作成内容 -->
 				<div class="row justify-content-center">
@@ -98,14 +96,26 @@
 		window.onload = function input_option(){
 			var num = document.getElementById("input_num").value;
 			const selectset = document.getElementById('stocks');
-			console.log(num)
 			for(var i = 1; i <= num; i++ ){
 				const option1 = document.createElement('option');
 				option1.value = i;
 				option1.textContent = i;
 				selectset.appendChild(option1);
-			}	
+			}
 		}
+		
+		//送信前に個数確認
+		function check(){
+			var num = document.getElementById("stocks").value;
+			if(window.confirm( num + '個で変更しますか？')){
+				return true;
+			}else{
+				windows.alter('キャンセルしました');
+				return false;
+			}
+					
+		}
+		
 		
 	</script>
 	
