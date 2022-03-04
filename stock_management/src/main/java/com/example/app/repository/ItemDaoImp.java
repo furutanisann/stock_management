@@ -146,7 +146,7 @@ public class ItemDaoImp implements ItemDao {
 	}
 	
 	
-	//登録用
+	//商品登録用
 	@Override
 	public int insert(PostForm form) {
 		//登録件数
@@ -166,26 +166,43 @@ public class ItemDaoImp implements ItemDao {
 		return count;
 
 	}
+	
+	//商品編集(商品１件分取得）用
+	@Override
+	public Item finditem(int id) {
+		
+	String sql = "SELECT * from item where item_id = :id";
+	Map<String, Object> param = new HashMap<>();
+	param.put("id",id);
+	
+	Item item = new Item();
+
+	Map<String,Object> result = jdbcTemplate.queryForMap(sql, param);
+	item.setId((int)result.get("item_id"));
+    item.setName((String)result.get("name"));
+    item.setFactory_id((int)result.get("factory_id"));
+    item.setExpiration_date((int)result.get("expiration_date"));
+    return item;
+	}
 
 
 	//更新用
 	@Override
-	public int update(PutForm form) {
+	public int update(PostForm form) {
 		int count = 0;
-	    String sql = "UPDATE diary "
-	            + "SET category=:category, title=:title, content=:content, date=:date, update_datetime=:update_datetime "
-	            + "WHERE id=:id";
+	    String sql = "UPDATE item "
+	            + "SET name=:name, factory_id=:factory_id, expiration_date=:expiration_date, update_at=:update_at "
+	            + "WHERE item_id=:id";
 
 		//URLからのパラメーター作成用
 		Map<String, Object> param = new HashMap<>();
 		//フォームにはいった値を取得しSQLに渡す
 	    param.put("id", form.getId());
-	    param.put("category", form.getCategoryForm());
-	    param.put("title", form.getTitleForm());
-	    param.put("content", form.getContentForm());
-	    param.put("date", form.getDateForm());
+	    param.put("name",form.getName());
+	    param.put("factory_id", form.getFactory_id());
+	    param.put("expiration_date", form.getExpiration_date());
 	    Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-	    param.put("update_datetime", timestamp);
+	    param.put("update_at", timestamp);
 	    count = jdbcTemplate.update(sql, param);
 	    return count;
 	}
@@ -194,14 +211,17 @@ public class ItemDaoImp implements ItemDao {
 	@Override
 	public int delete(int id) {
 		    int count = 0;
-		    String sql = "DELETE FROM diary "
-		            + "WHERE id = :id";
+		    String sql = "DELETE FROM item "
+		            + "WHERE item_id = :id";
 		    // パラメータ設定用Map
 		    Map<String, Object> param = new HashMap<>();
 		    param.put("id", id);
 		    count = jdbcTemplate.update(sql, param);
 		    return count;
 	}
+
+
+
 
 
 }

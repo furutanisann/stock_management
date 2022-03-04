@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>在庫調整</title>
+<title>商品編集</title>
 <!-- bootstrapを読み込む -->
 <link rel="stylesheet" type="text/css"
 	th:href="@{/css/bootstrap.min.css}">
@@ -24,7 +24,7 @@
 <body>
 	<nav class="navbar navbar-expand-lg navbar-light"
 			style="background-color: #CCFFFF;">
-			<span class="navbar-brand"> <strong>在庫調整</strong> <svg
+			<span class="navbar-brand"> <strong>商品編集</strong> <svg
 					xmlns="http://www.w3.org/2000/svg" width="16" height="16"
 					fill="currentColor" class="bi bi-book" viewBox="0 0 16 16">        </svg>
 			</span>
@@ -40,10 +40,10 @@
 		</nav>
 	<div class="container-fluid">
 		<div class="create m-2">
-			<!-- 送信前にチェックしています(check()） true時のみ実行 個数確認 -->
-			<form id="form" method="POST"　th:action="@{/stocklist/{id}/adjustment(id=${item.id})}"
-				th:object="${changeStock}"  onSubmit="return check()">
-				<p class="p-1 h4" th:text="在庫調整"></p>
+			<!-- 送信前にチェックしています(check()） true時のみ実行 　内容確認 -->
+			<form id="form" method="POST"  th:action="@{/stocklist/{id}/edit(id=${item.id})}"
+				th:object="${putForm}"  onSubmit="return check()">
+				<p class="p-1 h4" th:text="商品編集"></p>
 				<!-- データ作成内容 -->
 				<div class="row justify-content-center">
 					<div class="form-group col-8">
@@ -54,28 +54,33 @@
 					<div class="form-group col-8">
 						<label for="name">商品名</label>
 						 <input type="text" class="form-control" name="name" 
-						 id="name" th:value="${item.name}" readonly>
+						 id="name" th:value="${item.name}">
 					</div>
 				</div>
 				<div class="row justify-content-center">
 					<div class="form-group col-8">
-						<label for="expiration">賞味期限</label>
-						 <input type="text" class="form-control" 
-						  th:value="${item.date}" readonly>
+						<label for="categoryForm">賞味期限</label> 
+						<select id="expiration_date" name="expiration_date"
+							class="form-select col-8"  required>
+							<option selected value="">賞味期限を選択してください</option>
+							<option value="6" th:selected="${item.expiration_date == 6}">６か月</option>
+							<option value="9" th:selected="${item.expiration_date == 9}">９か月</option>
+							<option value="12" th:selected="${item.expiration_date == 12}">１２か月</option>
+						</select>
 					</div>
 				</div>
 				<div class="row justify-content-center">
 					<div class="form-group col-8">
-						<label for="stock">在庫変更数</label> 
-						<!-- テキスト入力が使わせたい場合 -->
-<!-- 						 <input type="text" class="form-control" name="stock" 
-						 id="stock"   th:value="${item.stock}"> -->
-						 <!-- セレクトで入力制限をかけておく -->
-						 	<input type="hidden" id="input_num" th:value="${item.stock}">
-						 	<select name="changestock" id="stocks" class="form-select form-select-lg mb-3 selectpicker" size="2" aria-label="size 3 select example">
-						 	</select>
+						<label for="factory">生産工場</label> 
+						<select id="factory_id" 
+							class="form-select col-8" name="factory_id" required>
+							<option selected value="">生産工場を選択してください</option>
+							<option value="1" th:selected="${item.factory_id == 1}">丹波工場</option>
+							<option value="2" th:selected="${item.factory_id == 2}">本社工場</option>
+						</select>
+						<div class="invalid-feedback">必須入力です</div>
 					</div>
-				</div>
+				</div>			
 				<div class="row justify-content-center pt-3">
 					<div class="col-1 d-grid gap-2 col-6 ma-ato">
 						<button type="submit" class="btn btn-danger">変更する</button>
@@ -84,37 +89,40 @@
 			</form>
 		</div>
 	</div>
-		<!-- 戻るボタン -->
-		<form th:action="@{/stocklist}" method="get">
-			<div class="d-grid gap-2 col-6 mx-auto pt-5">
-			   	<button class="btn btn-primary "  type="submit">戻る</button>
-			</div>
-		</form>
+	<!-- 戻るボタン -->
+	<form th:action="@{/stocklist/itemlist}" method="get">
+		<div class="d-grid gap-2 col-6 mx-auto pt-5">
+			 <button class="btn btn-primary "  type="submit">戻る</button>
+		</div>
+	</form>
 	<script>
-		//繰り返しでoptionの値をストックの数作成する
-		//読み込み後
-		window.onload = function input_option(){
-			var num = document.getElementById("input_num").value;
-			const selectset = document.getElementById('stocks');
-			for(var i = 1; i <= num; i++ ){
-				const option1 = document.createElement('option');
-				option1.value = i;
-				option1.textContent = i;
-				selectset.appendChild(option1);
-			}
+
+		
+
+	//送信前に入力内容確認
+	function check(){
+		var name = document.getElementById("name").value;
+		var date = document.getElementById("expiration_date").value;
+		var factory_id = document.getElementById("factory_id").value;
+		
+		switch(factory_id){
+			case '1' :
+				var factory = '丹波工場'; break;
+			case '2' :
+				var factory = '本社工場'; break;
 		}
 		
-		//送信前に個数確認
-		function check(){
-			var num = document.getElementById("stocks").value;
-			if(window.confirm( num + '個で変更しますか？')){
-				return true;
-			}else{
-				windows.alter('キャンセルしました');
-				return false;
-			}
-					
+		
+		if(window.confirm( '商品名　 :  ' + name + '\n' +  
+			   			   '賞味期限 :  ' + date + 'ヶ月\n' + 
+			   			   '製造工場 :  ' + factory + '\n' + 
+			   			   'で登録しますか？')){
+			return true;
+		}else{
+			windows.alter('キャンセルしました');
+			return false;
 		}
+	}
 		
 		
 	</script>

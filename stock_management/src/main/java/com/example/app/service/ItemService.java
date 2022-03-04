@@ -29,6 +29,7 @@ public class ItemService {
 	}
 	
 	//コンテナ(formタグ)から値を取得し返却
+	//商品確認、在庫確認の一覧表２つで使用
 	public List<Item> findList(GetForm form) {
 	       return dao.findList(form);
 	}
@@ -58,13 +59,18 @@ public class ItemService {
 		return dao.updateoneitem(form);
 	}
 	
-	//データ更新用
-	public int update(PutForm form) {
+	//商品データ更新用
+	public int update(PostForm form) {
 		return dao.update(form);
 	}
 	
-	//データ削除用
+	//商品データ削除用
 	public int delete(int id) {
 		return dao.delete(id);
+	}
+
+	//１商品編集画面移管
+	public Item findItem(int id) {
+		return dao.finditem(id);
 	}
 }

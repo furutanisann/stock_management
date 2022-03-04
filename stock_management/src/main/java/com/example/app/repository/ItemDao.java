@@ -21,18 +21,22 @@ public interface ItemDao {
 	//idを指定して１つ商品の在庫内容を表示
 	List<Item> findByid(int id);
 	
-	//商品登録用
-	int insert(PostForm form) ;
 	
-	//商品更新用
-	int update(PutForm form);
+	//商品在庫更新用
+	int update(PostForm form);
 	
 	//商品削除用
 	int delete(int id);
 	
-	//商品1つを更新するために取得
+	//商品在庫1つを更新するために取得
 	Item findbyoneitem(int id, String date);
 	
 	//商品１つの在庫（出荷表へ登録も含む）
 	int updateoneitem(ChangeStock form);
+
+	//商品登録用
+	int insert(PostForm form) ;
+	
+	//商品内容編集の為、取得
+	Item finditem(int id);
 }

@@ -11,7 +11,8 @@ import lombok.Data;
 @Data
 public class PostForm {
 	
-	
+	@NotNull
+	private int id;
  
 	@NotNull
 	@Size(min = 1, max = 25, message="25文字以内で入力してください。")

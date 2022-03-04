@@ -36,14 +36,14 @@ public class StockController {
 
 
 	/**
-     * 一覧画面を表示
+     * 在庫一覧画面を表示
      * modelクラスで送信
      * th:object:"${getForm}"などの形で受け取ってください
      * @param model
      * @return resources/templates/stocklist.html
      */
     @GetMapping
-    public String itemList(
+    public String stockList(
     	@ModelAttribute GetForm form,
     	Model model
     	){
@@ -172,29 +172,68 @@ public class StockController {
         int count = itemservice.insert(form);
         model.addAttribute("postForm", form);
         return "redirect:/startpage";
-    }
+    } 
+    
+ 	/**
+      * 編集のため商品一覧画面を表示
+      * modelクラスで送信
+      * 全体的には在庫一覧と同じ
+      * th:object:"${getForm}"などの形で受け取ってください
+      * @param model
+      * @return resources/templates/itemlist.html
+      */
+     @GetMapping("/itemlist")
+     public String itemList(
+     	@ModelAttribute GetForm form,
+     	Model model
+     	){
+     	List<Item> list = itemservice.findList(form);
+     	model.addAttribute("list",list);
+     	model.addAttribute("getform",form);
+     	return "item_list";
+     }
+     
+     /**
+      * 詳細ページ変更画面表示
+      * @param id
+      * @param model
+      * @return resources/templates/edit.html
+      */
+     // '/1'などのURLをパラメータ名として取得
+     @GetMapping("/{id}/edit")
+     public String itemedit(
+         @PathVariable int id,
+         Model model) {
+     	
+     	Item item = itemservice.findItem(id);
+     	model.addAttribute("item",item);
+     	return "edit";
 
-
-
-    /**
-    * 編集
-    * @param putForm
-    * @param model
-    * @return
-    */
-    @PostMapping(path="/update", params="update")
-    public String update(
-        @ModelAttribute PutForm form,
-        BindingResult result,
-        Model model
-    ) {
-        if(result.hasErrors()) {
-            model.addAttribute("error", "パラメータエラーが発生しました。");
-            return "form";
-        }
-        int count = itemservice.update(form);
-        return "redirect:/stocklist";
-    }
+     }
+     
+     /**
+      * 編集
+      * @param putForm
+      * @param model
+      * @return
+      */
+     @PostMapping("/{id}/edit")
+      public String update(
+    		@PathVariable int id,
+    	   	//バリデーションの確認
+    	    @Valid @ModelAttribute PostForm form,
+    	    //バリデーションの値,これの値により条件分岐
+    	      BindingResult result,
+    	      Model model
+    	  ) {
+    	       if(result.hasErrors()) {
+    	          model.addAttribute("error", "登録情報の一部に誤りがあります");
+    	           return "form";
+    	       }
+    	       int count = itemservice.update(form);
+    	       model.addAttribute("postForm", form);
+    	       return "redirect:/stocklist/itemlist";
+      } 
 
 
     /**
@@ -203,13 +242,13 @@ public class StockController {
      * @param model
      * @return
      */
-    @PostMapping("/delete")
+    @PostMapping("{id}/delete")
      public String delete(
     		 //パラメータをURLから受け取る
-    		 @RequestParam int id,
+    		 @PathVariable int id,
     		 Model model) {
     	 int count = itemservice.delete(id);
-    	 return "redirect:/stocklist";
+    	 return "redirect:/stocklist/itemlist";
      }
 
 

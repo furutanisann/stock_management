@@ -14,6 +14,8 @@ public class Item {
 	private String name;
 	private int expiration_date;
 	private int factory_id;
+	private String create_at;
+	private String update_at;
 	//以下詳細で使用する部分
 	private String date;
 	private int stock;
