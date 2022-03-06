@@ -18,20 +18,8 @@
 	th:src="@{/js/bootstrap-datepicker.ja.min.js}"></script>
 </head>
 <body>
-	<nav class="navbar navbar-expand-lg navbar-light"
-		style="background-color: #CCFFFF;">
-		<span class="navbar-brand"> <strong>商品登録</strong>
-		</span>
-		<div class="collapse navbar-collapse justify-content-end">
-			<ul class="navbar-nav">
-				<li class="nav-item "><span class="navbar-text"
-					th:text="'ログインユーザ：' + ${#httpServletRequest.remoteUser}">></span></li>
-			</ul>
-			<form method="POST" th:action="@{/logout}">
-				<button type="submit" class="btn btn-link">ログアウト</button>
-			</form>
-		</div>
-	</nav>
+	<!-- header読み込み(タイトル） -->
+	<div th:replace="layout/header::header('商品登録')"></div>
 	<div class="container-fluid">
 		<!-- エラーがあれば表示する model.addAttribute(“error”・・・指定すること-->
 		<h2 th:if="${error}" style="color: red;">[[${error}]]</h2>
