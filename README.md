@@ -11,8 +11,7 @@
 ●作成環境
 ・STS  (Exlipse)
       Spring boot  2.5.9　
-      タイプ　　　　　　　　　　　　　　　　　　Gradle
-      言語　　　　　　　　　　　　　　　　　　　　Java　　　１１
+      タイプ　　　　　　　　　　　　　　　　　　Gradle    使用言語　　　　　　　　　　　　　Java　　　１１
       
       スターター
       JDBC API   Lombok    MySQL Driver    Spring Boot Devtools    Spring Security
