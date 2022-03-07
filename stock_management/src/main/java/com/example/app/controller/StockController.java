@@ -20,6 +20,7 @@ import com.example.app.entity.Item;
 import com.example.app.form.ChangeStock;
 import com.example.app.form.GetForm;
 import com.example.app.form.PostForm;
+import com.example.app.form.PostStockForm;
 import com.example.app.form.PutForm;
 import com.example.app.service.ItemService;
 
@@ -53,6 +54,46 @@ public class StockController {
     	return "stock_list";
     }
 
+	/**
+     * 在庫の追加画面
+     * modelクラスで送信
+     * th:object:"${getForm}"などの形で受け取ってください
+     * @param model
+     * @return resources/templates/stockform.html
+     */
+    @GetMapping("/stockform")
+    public String newStock(
+         	@ModelAttribute GetForm form,
+         	Model model
+         	){
+         	List<Item> list = itemservice.findList(form);
+         	model.addAttribute("list",list);
+         	model.addAttribute("getform",form);
+         	return "stockform";
+         }
+    
+    /**
+     * 在庫データ新規登録
+     * @param postForm
+     * @param model
+     * @return
+     */
+    @PostMapping("/stockinsert")
+    public String stockInsert(
+    	//バリデーションの確認
+        @Valid @ModelAttribute PostStockForm form,
+        //バリデーションの値,これの値により条件分岐
+        BindingResult result,
+        Model model
+    ) {
+        if(result.hasErrors()) {
+            model.addAttribute("error", "登録情報の一部に誤りがあります");
+            return "stockform";
+        }
+        int count = itemservice.stockinsert(form);
+        model.addAttribute("postForm", form);
+        return "redirect:/startpage";
+    } 
 
     /**
      * 一件タスクデータを取得し、詳細ページ表示

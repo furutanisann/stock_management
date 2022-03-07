@@ -3,21 +3,19 @@
 
 <header th:fragment="header(title)">
 	<!-- ヘッダーナビゲーション -->
-	<div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
-	  <!-- <h5 class="my-0 mr-md-auto font-weight-normal">Company name</h5> -->
-	  <h5 class="my-0 mr-md-auto font-weight-normal">生産管理システム</h5>
+	<div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-info border-bottom shadow-sm">
+	  <h5 class="my-0 mr-md-auto font-weight-normal bg-white p-1">生産管理システム</h5>
 	  <nav class="my-2 my-md-0 mr-md-3">
 	    <a class="p-2 text-dark" th:href="@{/startpage}">HOME</a>
 	    <a class="p-2 text-dark" th:href="@{/stocklist}">在庫一覧</a>
-	    <a class="p-2 text-dark" href="@{/stocklist/syukka}">出荷</a>
+	    <a class="p-2 text-dark" href="@{/stocklist/stockform}">在庫追加</a>
 	  </nav>
-	  <!-- <a class="btn btn-outline-primary" href="#">Sign up</a> -->
-		<form method="POST" th:action="@{/logout}">
-			<button type="submit" class="btn btn-link">ログアウト</button>
-		</form>
-		<span class="navbar-text"
+	  <span class="navbar-text mx-5"
 			th:text="'ログインユーザ：' + ${#httpServletRequest.remoteUser}">>
-		</span>
+	  </span>
+	  <form method="POST" th:action="@{/logout}" class="pt-3 mx-5 form-inline">
+		<button type="submit" class="btn btn-warning">ログアウト</button>
+	  </form>
 	</div>
 	<!-- ヘッダーナビゲーションここまで -->
 	<!-- ヘッダータイトル（わかりやすくするために） -->

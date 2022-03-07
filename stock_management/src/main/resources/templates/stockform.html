@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>商品登録</title>
+<title>在庫</title>
 <!-- bootstrapを読み込む -->
 <link rel="stylesheet" type="text/css"
 	th:href="@{/css/bootstrap.min.css}">
@@ -19,48 +19,52 @@
 </head>
 <body>
 	<!-- header読み込み(タイトル） -->
-	<div th:replace="layout/header::header('商品登録')"></div>
+	<div th:replace="layout/header::header('在庫登録')"></div>
 	<div class="container-fluid">
 		<!-- エラーがあれば表示する model.addAttribute(“error”・・・指定すること-->
 		<h2 th:if="${error}" style="color: red;">[[${error}]]</h2>
 		<div class="create m-2">
 			<!-- boot strap で一部バリデーション実施 -->
 			<!-- 送信前にチェックしています(check()） true時のみ実行 -->
-			<!--  ${update}? @{/stocklist/update}: @{/stocklist/insert で各表示変更する -->
 			<form id="form" class="needs-validation" novalidate method="POST"
-				th:action="@{/stocklist/insert}"
-				th:object="${putForm}" onSubmit="return check()">
-				<p class="p-1 h4" th:text="新規作成"></p>
+				th:action="@{/stocklist/stockinsert}"
+				th:object="${postForm}" onSubmit="return check()">
+				<p class="p-1 h4" th:text="在庫登録"></p>
 				<!-- データ作成内容 -->
 				<div class="row justify-content-center">
 					<div class="form-group col-8">
-						<label for="name">商品名</label> <input type="text"
-							class="form-control"  id="name" name="name"
-							placeholder="商品名">
-						<div class="invalid-feedback">25文字以内で入力してください</div>
+					<label for="title">商品名</label> 
+					<select id="id" name="id" class="form-select col-2">
+							<option selected value="">商品を選んでください</option>
+						<option  th:each="item: ${list}" th:value="${item.id}" th:inline="text">[[${item.name}]]</option>
+					</select>
 					</div>
 				</div>
 				<div class="row justify-content-center">
 					<div class="form-group col-8">
-						<label for="categoryForm">賞味期限</label> 
-						<select id="expiration_date" name="expiration_date"
-							class="form-select col-8"  required>
-							<option selected value="">賞味期限を選択してください</option>
-							<option value="6" >６か月</option>
-							<option value="9" >９か月</option>
-							<option value="12" >１２か月</option>
-						</select>
+						<label for="makedate">製造日</label> 
+						<div>
+							<input class="col-12" type="date" name="date" id="date"></input>						
+						</div>
 					</div>
 				</div>
 				<div class="row justify-content-center">
 					<div class="form-group col-8">
-						<label for="categoryForm">生産工場</label> 
+						<label for="factoru">生産工場</label> 
 						<select id="factory_id" 
 							class="form-select col-8" name="factory_id" required>
 							<option selected value="">生産工場を選択してください</option>
 							<option value="1" >丹波工場</option>
 							<option value="2" >本社工場</option>
 						</select>
+						<div class="invalid-feedback">必須入力です</div>
+					</div>
+				</div>
+				<div class="row justify-content-center">
+					<div class="form-group col-8">
+						<label for="stock">生産数</label> <input type="number" min="1"
+							class="form-control"  id="stock" name="stock"
+							placeholder="生産数">
 						<div class="invalid-feedback">必須入力です</div>
 					</div>
 				</div>
@@ -85,8 +89,8 @@
 
 	//送信前に入力内容確認
 	function check(){
-		var name = document.getElementById("name").value;
-		var date = document.getElementById("expiration_date").value;
+		var name = document.getElementById("id").value;
+		var date = document.getElementById("dateForm").value;
 		var factory_id = document.getElementById("factory_id").value;
 		
 		switch(factory_id){
@@ -97,8 +101,8 @@
 		}
 		
 		
-		if(window.confirm( '商品名　 :  ' + name + '\n' +  
-			   			   '賞味期限 :  ' + date + 'ヶ月\n' + 
+		if(window.confirm( '商品番号　 :  ' + name + '\n' +  
+			   			   '製造日 :  ' + date + 'ヶ月\n' + 
 			   			   '製造工場 :  ' + factory + '\n' + 
 			   			   'で登録しますか？')){
 			return true;

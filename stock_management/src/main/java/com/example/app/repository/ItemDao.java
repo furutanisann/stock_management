@@ -7,6 +7,7 @@ import com.example.app.entity.Item;
 import com.example.app.form.ChangeStock;
 import com.example.app.form.GetForm;
 import com.example.app.form.PostForm;
+import com.example.app.form.PostStockForm;
 import com.example.app.form.PutForm;
 
 //データベース接続用インターフェースクラス
@@ -20,6 +21,9 @@ public interface ItemDao {
 	
 	//idを指定して１つ商品の在庫内容を表示
 	List<Item> findByid(int id);
+	
+	//在庫の追加
+	int stockinsert(PostStockForm form);
 	
 	
 	//商品在庫更新用

@@ -16,6 +16,7 @@ import com.example.app.entity.Item;
 import com.example.app.form.ChangeStock;
 import com.example.app.form.GetForm;
 import com.example.app.form.PostForm;
+import com.example.app.form.PostStockForm;
 import com.example.app.form.PutForm;
 
 //DBへ直接サクセス実装クラス
@@ -33,11 +34,11 @@ public class ItemDaoImp implements ItemDao {
 	}
 
 
-	//要求内容（すべての投稿内容を取得)
+	//要求内容（すべての在庫内容を取得)
 	public List<Item> findList(GetForm form) {
 		//StringBuilderでSQLを連結
 		StringBuilder sqlBuilder = new StringBuilder();
-        sqlBuilder.append("SELECT * from item");
+        sqlBuilder.append("SELECT * from item;");
 
 
         // パラメータ設定用Map
@@ -63,6 +64,8 @@ public class ItemDaoImp implements ItemDao {
             item.setName((String)result.get("name"));
             item.setExpiration_date((int)result.get("expiration_date"));
             item.setFactory_id((int)result.get("factory_id"));
+            item.setCreate_at((String)result.get("create_at").toString());
+            item.setUpdate_at((String)result.get("update_at").toString());
             list.add(item);
         }
         //まとめたものをリストとして返す
@@ -103,7 +106,7 @@ public class ItemDaoImp implements ItemDao {
         return list;
 	}
 	
-	//１つの商品の１つの賞味期限取得
+	//１つの商品の１つの賞味期限で登録された商品取得
 	@Override
 	public Item findbyoneitem(int id, String date) {
 		String sql = "SELECT d.item_id,d.name, DATE_FORMAT(c.expiration,'%Y年%m月%d日') as date, c.stock "
@@ -125,7 +128,35 @@ public class ItemDaoImp implements ItemDao {
         return item;
 	};
 	
-	
+	//在庫追加用
+	@Override
+	public int stockinsert(PostStockForm form) {
+		//登録件数
+		int count = 0;
+		
+		//先に賞味期限を商品から取得
+		String search = "SELECT expiration_date from item "
+					  + "WHERE item_id = :id";
+		Map<String, Object> param1 = new HashMap<>();
+		param1.put("id", form.getId());
+		Map<String,Object> resultsearch = jdbcTemplate.queryForMap(search, param1);
+
+		
+		//ここから在庫登録内容
+		String sql = "INSERT INTO stock(item_id,stock,production,expiration) "
+					+"VALUES(:item_id,:stock,:production,"
+					+ "DATE_ADD(:production,INTERVAL :expiration MONTH));";
+		//登録用データ
+		Map<String, Object> param = new HashMap<>();
+		param.put("item_id", form.getId());
+		param.put("stock", form.getStock());
+		param.put("production", form.getDate());
+		param.put("expiration",((int)resultsearch.get("expiration_date")));
+		//SQLでデータベースヘアクセス（登録）
+		count = jdbcTemplate.update(sql,param);
+		return count;
+
+	}
 	
 	//１つの商品を在庫調整
 	@Override
@@ -151,8 +182,8 @@ public class ItemDaoImp implements ItemDao {
 	public int insert(PostForm form) {
 		//登録件数
 		int count = 0;
-		String sql = "INSERT INTO item(name,expiration_date,factory_id,create_at) "
-				    +"VALUES(:name,:expiration_date,:factory_id,:update_time)";
+		String sql = "INSERT INTO item(name,expiration_date,factory_id,create_at,update_at) "
+				    +"VALUES(:name,:expiration_date,:factory_id,:update_time,:update_time)";
 		//登録用データ
 		Map<String, Object> param = new HashMap<>();
 		param.put("name",form.getName());
@@ -219,6 +250,8 @@ public class ItemDaoImp implements ItemDao {
 		    count = jdbcTemplate.update(sql, param);
 		    return count;
 	}
+
+
 
 
 

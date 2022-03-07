@@ -1,6 +1,8 @@
 package com.example.app.form;
 
 
+import java.sql.Date;
+
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -23,5 +25,5 @@ public class PostForm {
 
 	@NotNull
 	private int factory_id;
-
+	
 }

@@ -29,14 +29,14 @@
 		<div class="search m-2">
 			<form method="GET" th:action="@{/stocklist}" th:object="${getForm}">
 				<div class="row">
-					<div class="form-group col-3 m-2">
+					<div class="form-group col-6 m-2">
 						<label for="category">名前検索</label> <select id="category"
 							name="name" class="form-select col-2">
 							<option></option>
 							<option  th:each="item: ${list}" th:value="${item.name}" th:inline="text">[[${item.name}]]</option>
 						</select>
 					</div>
-					<div class="col-2 m-2">
+					<div class="col-2 m-2 pt-4">
 						<button type="submit" class="btn btn-primary">検索</button>
 					</div>
 				</div>
@@ -60,7 +60,10 @@
 						<td th:text=${item.id}></td>
 						<td th:text=${item.name}></td>
 						<td th:text=${item.expiration_date}></td>
-						<td th:text=${item.factory_id}></td>
+						<div th:switch="${item.factory_id}">
+							<td th:case="1" th:text="丹波工場"></td>
+							<td th:case="2" th:text="本社工場"></td>
+						</div>
 						<td><a class="btn btn-primary"
 							th:href="@{/stocklist/{id}(id=${item.id})}">在庫確認</a></td>
 					</tr>

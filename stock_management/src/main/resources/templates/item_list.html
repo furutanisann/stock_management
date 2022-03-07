@@ -62,12 +62,15 @@
 				<tbody>
 					<!-- listをitemに1件ずつの値をループで取得します -->
 					<tr th:each="item: ${list}">
-						<td th:text=${item.id}></td>
-						<td th:text=${item.name}></td>
-						<td th:text=${item.expiration_date}></td>
-						<td th:text=${item.factory_id}></td>
-						<td th:text=${item.create_at}></td>
-						<td th:text=${item.update_at}></td>
+						<td th:text="${item.id}"></td>
+						<td th:text="${item.name}"></td>
+						<td th:text="|${item.expiration_date}ヶ月|"></td>
+						<div th:switch="${item.factory_id}">
+							<td th:case="1" th:text="丹波工場"></td>
+							<td th:case="2" th:text="本社工場"></td>
+						</div>
+						<td th:text="${item.create_at}"></td>
+						<td th:text="${item.update_at}"></td>
 						<td><a class="btn btn-primary"
 							th:href="@{/stocklist/{id}/edit(id=${item.id})}">編集</a></td>
 						<!-- 削除ボタン -->

@@ -23,75 +23,82 @@
 <body>
 	<!-- header読み込み(タイトル） -->
 	<div th:replace="layout/header::header('トップページ')"></div>
- 　　<!-- content -->
-    <div class="container" style="padding:40px 0 0 0">
-        <!-- main -->
-        <div class="col-md-9 ">
-            <div class="row text-center mx-auto">
-            	<!-- 単位１ -->
-                <div class="col-md-4">
-                    <div class="thumbnail" style="text-align:center;padding-top:10px;
-                    								background:#ddd; border: 10px #696969 solid; padding:15px;">
-                        <a th:href="@{/stocklist/form}">
-                            <img style="width : 100% ; height: 100%; 
-                            background:#ddd; border: 5px #696969 solid; padding:5px" th:src="@{/images/touroku.jpg}">
-                        </a>
-                        <div class="caption">
-                            <p style="margin-bottom:0px"><a href="" class="btn btn-primary">商品登録</a></p>
-                        </div>
-                    </div>
-                </div>
-                <!-- ここまで -->
-                <!-- 単位１ -->
-                <!-- 単位２ -->
-                <div class="col-md-4">
-                    <div class="thumbnail" style="text-align:center;padding-top:10px;
-                    								background:#ddd; border: 10px #696969 solid; padding:15px;">
-                        <a th:href="@{/stocklist/itemlist}">
-                            <img style="width : 100% ; height: 100%;
-                            background:#ddd; border: 5px #696969 solid; padding:15px" th:src="@{/images/update.jpg}">
-                        </a>
-                        <div class="caption">
-                            <p style="margin-bottom:0px"><a href="" class="btn btn-primary">商品変更・削除</a></p>
-                        </div>
-                    </div>
-                </div>
-                <!-- ここまで -->
-                <!-- 単位２ -->
-                <!-- 単位３ -->
-                <div class="col-md-4">
-                    <div class="thumbnail" style="text-align:center;padding-top:10px;
-                    								background:#ddd; border: 10px #696969 solid; padding:15px;">
-                        <a th:href="@{/stocklist}" >
-                            <img style="width : 100% ; height: 100%;
-										background:#ddd; border: 5px #696969 solid; padding:15px" th:src="@{/images/stock.jpg}">
-                        </a>
-                        <div class="caption">
-                            <p style="margin-bottom:0px"><a href="" class="btn btn-primary">在庫確認・管理</a></p>
-                        </div>
-                    </div>
-                </div>
-                <!-- ここまで -->
-                <!-- 単位３ -->
-                <!-- 単位4 -->
-                <div class="col-md-4">
-                    <div class="thumbnail" style="text-align:center;padding-top:10px;
-                    								background:#ddd; border: 10px #696969 solid; padding:15px;">
-                        <a th:href="@{/stocklist}" >
-                            <img style="width : 100% ; height: 100%;
-										background:#ddd; border: 5px #696969 solid; padding:15px" th:src="@{/images/torack.jpg}">
-                        </a>
-                        <div class="caption">
-                            <p style="margin-bottom:0px"><a href="" class="btn btn-primary">出荷一覧</a></p>
-                        </div>
-                    </div>
-                </div>
-                <!-- ここまで -->
-                <!-- 単位4 -->
-            </div><!-- end row -->
-        </div><!-- end main -->
-    </div><!-- end content -->
-
-
+	<!-- content -->
+	<div class="container">
+	  <div class="card-deck mb-3 text-center row">
+	  　<!-- 項目１ -->
+	    <div class="card mb-4 col-lg-5 shadow-sm">
+	      <div class="card-header">
+	        <h4 class="my-0 font-weight-normal">在庫</h4>
+	      </div>
+	      <div class="card-body">
+			<img style="width : 50% ; height: 50%;
+			background:#ddd; border: 5px #696969 solid; padding:15px" th:src="@{/images/stock.jpg}">
+	        <ul class="list-unstyled mt-3 mb-4">
+	          <li>各商品在庫一覧</li>
+	          <li>変更等が可能</li>
+	        </ul>
+	        <form method="GET" th:action="@{/stocklist}">
+	       		 <button type="submit" class="btn btn-lg btn-block btn-outline-primary">在庫確認</button>
+	       	</form>
+	      </div>
+	    </div>
+	    <!-- 項目１ -->
+	    <!-- 項目２ -->
+	    <div class="card mb-4 col-lg-5 shadow-sm">
+	      <div class="card-header">
+	        <h4 class="my-0 font-weight-normal">生産</h4>
+	      </div>
+	      <div class="card-body">
+			<img style="width : 50% ; height: 50%;
+			background:#ddd; border: 5px #696969 solid; padding:15px" th:src="@{/images/torack.jpg}">
+	        <ul class="list-unstyled mt-3 mb-4">
+	          <li>製品製造後追加</li>
+	          <li>在庫追加</li>
+	        </ul>
+	        <form method="GET" th:action="@{/stocklist/stockform}">
+	       	 <button type="submit" class="btn btn-lg btn-block btn-outline-primary">在庫追加</button>
+	       	</form>
+	      </div>
+	    </div>
+	    <!-- 項目２ -->
+	    <!-- 項目３ -->
+	    <div class="card mb-4 col-lg-5 shadow-sm">
+	      <div class="card-header">
+	        <h4 class="my-0 font-weight-normal">商品登録</h4>
+	      </div>
+	      <div class="card-body">
+			<img style="width : 50% ; height: 50%;
+			background:#ddd; border: 5px #696969 solid; padding:15px" th:src="@{/images/insert.jpg}">
+	        <ul class="list-unstyled mt-3 mb-4">
+	          <li>商品新規登録</li>
+	          <li>新製品登録の場合</li>
+	        </ul>
+	        <form method="GET" th:action="@{/stocklist/form}">
+	       		 <button type="submit" class="btn btn-lg btn-block btn-outline-primary">新規登録</button>
+	       	</form>
+	      </div>
+	    </div>
+	    <!-- 項目３ -->
+	    <!-- 項目４ -->
+	    <div class="card mb-4 col-lg-5 shadow-sm">
+	      <div class="card-header">
+	        <h4 class="my-0 font-weight-normal">商品内容確認・変更</h4>
+	      </div>
+	      <div class="card-body">
+			<img style="width : 50% ; height: 50%;
+			background:#ddd; border: 5px #696969 solid; padding:15px" th:src="@{/images/update.jpg}">
+	        <ul class="list-unstyled mt-3 mb-4">
+	          <li>商品内容の変更・削除</li>
+	          <li>製品内容の詳細を変更と削除</li>
+	        </ul>
+	        <form method="GET" th:action="@{/stocklist/itemlist}">
+	       	 	<button type="submit" class="btn btn-lg btn-block btn-outline-primary">商品一覧</button>
+	       	</form>
+	      </div>
+	    </div>
+	    <!-- 項目４ -->
+	  </div>
+	</div>
 </body>
 </html>

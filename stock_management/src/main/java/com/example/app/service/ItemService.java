@@ -12,6 +12,7 @@ import com.example.app.entity.Item;
 import com.example.app.form.ChangeStock;
 import com.example.app.form.GetForm;
 import com.example.app.form.PostForm;
+import com.example.app.form.PostStockForm;
 import com.example.app.form.PutForm;
 import com.example.app.repository.ItemDao;
 import com.example.app.repository.ItemDaoImp;
@@ -28,16 +29,17 @@ public class ItemService {
 		this.dao = dao;
 	}
 	
+	//在庫追加
+	public int stockinsert(PostStockForm form) {
+		return dao.stockinsert(form);
+	}
+	
 	//コンテナ(formタグ)から値を取得し返却
 	//商品確認、在庫確認の一覧表２つで使用
 	public List<Item> findList(GetForm form) {
 	       return dao.findList(form);
 	}
 	
-	//データの登録
-	public int insert(PostForm form) {
-		return dao.insert(form);
-	}
 	
 	//１つの商品（編集ページ確認）
 	public List<Item> findById(int id) {
@@ -57,6 +59,11 @@ public class ItemService {
 	//1つの商品1件分（在庫調整）
 	public int updateonitem(ChangeStock form){
 		return dao.updateoneitem(form);
+	}
+	
+	//データの登録
+	public int insert(PostForm form) {
+		return dao.insert(form);
 	}
 	
 	//商品データ更新用
